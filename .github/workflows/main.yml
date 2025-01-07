@@ -2,7 +2,7 @@ name: Daily Workflow
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+   - cron: '*/5 * * * *'
 
 jobs:
   build:
@@ -21,7 +21,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install notebook
-
+        pip install pandas 
+        pip install hopsworks
+        pip install -r requirements.txt
+        
     - name: Run update_police_api_backfill notebook
       run: |
         jupyter nbconvert --to notebook --execute project/update_police_api_backfill.ipynb
