@@ -181,55 +181,6 @@ def get_pm25(aqicn_url: str, country: str, city: str, street: str, day: datetime
 
     return aq_today_df
 
-
-def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcast=False):
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    day = pd.to_datetime(df['date']).dt.date
-    # Plot each column as a bar graph in matplotlib
-    ax.bar(day, df['predicted_accidents'], label='Predicted Accidents', color='red')
-
-    # Set the y-axis to a logarithmic scale
-    ax.set_yscale('log')
-    ax.set_yticks([1, 10, 25, 50, 100, 250, 500])
-    ax.get_yaxis().set_major_formatter(plt.ScalarFormatter())
-    ax.set_ylim(bottom=1)
-
-    # Set the labels and title
-    ax.set_xlabel('Date')
-    ax.set_title(f"Accidents Predicted (Logarithmic Scale) for {city}")
-    ax.set_ylabel('Accidents')
-
-    colors = ['green', 'yellow', 'orange', 'red', 'purple', 'darkred']
-    labels = ['Very Low', 'Low', 'Moderate', 'High', 'Very High', 'Extreme']
-    ranges = [(0, 9), (10, 19), (20, 29), (30, 39), (40, 49), (50, 100)]
-    for color, (start, end) in zip(colors, ranges):
-        ax.axhspan(start, end, color=color, alpha=0.3)
-
-    # Add a legend for the different Accident Categories
-    patches = [Patch(color=colors[i], label=f"{labels[i]}: {ranges[i][0]}-{ranges[i][1]}") for i in range(len(colors))]
-    legend1 = ax.legend(handles=patches, loc='upper right', title="Accident Categories", fontsize='x-small')
-
-    # Aim for ~10 annotated values on x-axis, will work for both forecasts and hindcasts
-    if len(df.index) > 11:
-        every_x_tick = len(df.index) / 10
-        ax.xaxis.set_major_locator(MultipleLocator(every_x_tick))
-
-    plt.xticks(rotation=45)
-
-    if hindcast:
-        ax.bar(day, df['accidents'], label='Actual Accidents', color='black', alpha=0.5)
-        legend2 = ax.legend(loc='upper left', fontsize='x-small')
-        ax.add_artist(legend1)
-
-    # Ensure everything is laid out neatly
-    plt.tight_layout()
-
-    # Save the figure, overwriting any existing file with the same name
-    plt.savefig(file_path)
-    return plt
-
-
 def delete_feature_groups(fs, name):
     try:
         for fg in fs.get_feature_groups(name):
@@ -354,5 +305,40 @@ def traf_plot_accidents_forecast(country: str, df: pd.DataFrame, file_path: str,
     plt.tight_layout()
 
     # # Save the figure, overwriting any existing file with the same name
+    plt.savefig(file_path)
+    return plt
+
+def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcast=False):
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    day = pd.to_datetime(df['date']).dt.date
+    # Plot predicted accidents as a bar graph
+    ax.bar(day, df['predicted_accidents'], label='Predicted Accidents', color='red')
+
+    # Set the y-axis ticks
+    ax.set_yticks([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
+    ax.set_ylim(bottom=0)
+
+    # Set the labels and title
+    ax.set_xlabel('Date')
+    ax.set_title(f"Accidents Predicted for {city}")
+    ax.set_ylabel('Accidents')
+
+    # Aim for ~10 annotated values on x-axis
+    if len(df.index) > 11:
+        every_x_tick = len(df.index) // 10
+        ax.xaxis.set_major_locator(MultipleLocator(every_x_tick))
+
+    plt.xticks(rotation=45)
+
+    if hindcast:
+        # Plot actual accidents as a bar graph
+        ax.bar(day, df['accidents'], label='Actual Accidents', color='black', alpha=0.5)
+        ax.legend(loc='upper left', fontsize='x-small')
+
+    # Ensure everything is laid out neatly
+    plt.tight_layout()
+
+    # Save the figure
     plt.savefig(file_path)
     return plt
