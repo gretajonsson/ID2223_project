@@ -41,8 +41,15 @@ jobs:
         jupyter nbconvert --to notebook --execute project/batch_inference.ipynb
 
     - name: github pages publish
-      uses: crazy-max/ghaction-github-pages@v2
+      uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        target_branch: gh-pages
-        build_dir: project
-        commit_message: Update GitHub Pages
+        commit_message: "Updated predictions"
+        commit_options: '--no-verify --signoff'
+        
+        file_pattern: 'index.html'
+        repository: .
+        status_options: '--untracked-files=no'          
+        skip_dirty_check: true
+        skip_fetch: true
+        skip_checkout: true
+        push_options: '--force'
