@@ -15,6 +15,7 @@ ID2223_PROJECT/
 │
 ├── .github/workflows/
 │   └── main.yml                  # CI/CD workflow configuration
+│   └── page_update.yml           # Builds page agian
 │
 ├── data/
 │   ├── aqi-api-key.txt           # API key for AQI data (if applicable)
@@ -35,7 +36,7 @@ ID2223_PROJECT/
 │
 ├── batch_inference.ipynb         # Notebook for batch predictions
 ├── data_retrival.ipynb           # Notebook for retrieving data from APIs
-├── feature_backfill.ipynb        # Notebook for handling missing historical features
+├── feature_backfill.ipynb        # Notebook for uploading backfills
 ├── feature_pipeline.ipynb        # Notebook for creating feature pipelines
 ├── training_pipeline.ipynb       # Notebook for model training pipeline
 ├── update_police_api_backfill.ipynb  # Notebook to update police API backfill

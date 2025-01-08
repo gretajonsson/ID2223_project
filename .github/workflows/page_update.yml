@@ -1,0 +1,25 @@
+name: github pages publish
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+              - name: Checkout repository
+                uses: actions/checkout@v2
+    
+              - name: Commit and push changes
+                uses: stefanzweifel/git-auto-commit-action@v5
+                with:
+                  commit_message: "Page_update"
+                  commit_options: '--no-verify --signoff'
+                  file_pattern: 'index.html'
+                  status_options: '--untracked-files=no'
+                  skip_dirty_check: true
+                  skip_fetch: true
+                  skip_checkout: true
+                  push_options: '--force'
