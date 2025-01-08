@@ -296,7 +296,7 @@ def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcas
     ax.bar(day, df['predicted_accidents'], label='Predicted Accidents', color='red')
 
     # Set the y-axis ticks
-    ax.set_yticks([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
+    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     ax.set_ylim(bottom=0)
 
     # Set the labels and title

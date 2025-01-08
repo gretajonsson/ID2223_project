@@ -52,7 +52,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: ./path-to-your-site
+        path: ./index.html
 
     - name: Deploy to GitHub Pages
       id: deployment
