@@ -46,4 +46,3 @@ jobs:
         target_branch: gh-pages
         build_dir: project
         commit_message: Update GitHub Pages
-        fqdn:
