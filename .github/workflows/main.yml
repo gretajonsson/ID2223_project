@@ -2,7 +2,7 @@ name: Daily Workflow
 
 on:
   schedule:
-   - cron: '*/5 * * * *'
+   - cron: '0 0 * * *'
   workflow_dispatch:  # This enables manual triggering of the workflow
 
 
@@ -39,17 +39,3 @@ jobs:
     - name: Run batch_inference notebook
       run: |
         jupyter nbconvert --to notebook --execute project/batch_inference.ipynb
-
-    - name: github pages publish
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Updated predictions"
-        commit_options: '--no-verify --signoff'
-        
-        file_pattern: 'index.html'
-        repository: .
-        status_options: '--untracked-files=no'          
-        skip_dirty_check: true
-        skip_fetch: true
-        skip_checkout: true
-        push_options: '--force'
