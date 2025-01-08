@@ -114,8 +114,6 @@ def get_hourly_weather_forecast(city, latitude, longitude):
     hourly_dataframe = hourly_dataframe.dropna()
     return hourly_dataframe
 
-
-
 def get_city_coordinates(city_name: str):
     """
     Takes city name and returns its latitude and longitude (rounded to 2 digits after dot).
@@ -139,7 +137,6 @@ def trigger_request(url:str):
         raise requests.exceptions.RequestException(response.status_code)
 
     return data
-
 
 def get_pm25(aqicn_url: str, country: str, city: str, street: str, day: datetime.date, AQI_API_KEY: str):
     """
@@ -229,13 +226,11 @@ def purge_project(proj):
     # delete_models(mr, "air_quality_xgboost_model")
     # delete_secrets(proj, "SENSOR_LOCATION_JSON")
 
-
 def secrets_api(proj):
     host = "c.app.hopsworks.ai"
     api_key = os.environ.get('HOPSWORKS_API_KEY')
     conn = hopsworks.connection(host=host, project=proj, api_key_value=api_key)
     return conn.get_secrets_api()
-
 
 def check_file_path(file_path):
     my_file = Path(file_path)
@@ -256,38 +251,22 @@ def backfill_predictions_for_monitoring(weather_fg, air_quality_df, monitor_fg, 
     monitor_fg.insert(df, write_options={"wait_for_job": True})
     return hindcast_df
 
-
-
-
-def traf_plot_accidents_forecast(country: str, df: pd.DataFrame, file_path: str, hindcast=False):
+def traf_plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcast=False):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     day = pd.to_datetime(df['date']).dt.date
     # Plot each column separately in matplotlib
     ax.plot(day, df['predicted_accidents'], label='Predicted Accidents', color='red', linewidth=2, marker='o', markersize=5, markerfacecolor='blue')
 
-    # Set the y-axis to a logarithmic scale
-    # ax.set_yscale('log')
-    # ax.set_yticks([0, 10, 25, 50, 100, 250, 500])
-    ax.set_yticks([0, 10, 20, 30, 40, 50, 100])
+
+    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     ax.get_yaxis().set_major_formatter(plt.ScalarFormatter())
     ax.set_ylim(bottom=1)
 
     # Set the labels and title
     ax.set_xlabel('Date')
-    ax.set_title(f"Traffic Accidents Predicted for {country}")
+    ax.set_title(f"Traffic Accidents Predicted for {city}")
     ax.set_ylabel('Accidents')
-
-    colors = ['green', 'yellowgreen', 'gold', 'orange', 'tomato', 'darkred']
-    # labels = ['Good', 'Moderate', 'Unhealthy for Some', 'Unhealthy', 'Very Unhealthy', 'Hazardous']
-    # ranges = [(0, 49), (50, 99), (100, 149), (150, 199), (200, 299), (300, 500)]
-    ranges = [(0, 9), (10, 19), (20, 29), (30, 39), (40, 49), (50, 100)]
-    for color, (start, end) in zip(colors, ranges):
-        ax.axhspan(start, end, color=color, alpha=0.6)
-
-    # Add a legend for the different Air Quality Categories
-    # patches = [Patch(color=colors[i], label=f"{labels[i]}: {ranges[i][0]}-{ranges[i][1]}") for i in range(len(colors))]
-    # legend1 = ax.legend(handles=patches, loc='upper right', title="Accident Categories", fontsize='x-small')
 
     # Aim for ~10 annotated values on x-axis, will work for both forecasts ans hindcasts
     if len(df.index) > 11:
@@ -309,6 +288,7 @@ def traf_plot_accidents_forecast(country: str, df: pd.DataFrame, file_path: str,
     return plt
 
 def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcast=False):
+
     fig, ax = plt.subplots(figsize=(10, 6))
 
     day = pd.to_datetime(df['date']).dt.date
@@ -316,7 +296,7 @@ def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcas
     ax.bar(day, df['predicted_accidents'], label='Predicted Accidents', color='red')
 
     # Set the y-axis ticks
-    ax.set_yticks([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
+    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     ax.set_ylim(bottom=0)
 
     # Set the labels and title
@@ -342,3 +322,35 @@ def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcas
     # Save the figure
     plt.savefig(file_path)
     return plt
+
+def plot_accidents_table(city: str, df: pd.DataFrame, file_path: str, hindcast=False):
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # Create table data
+        table_data = {
+            "Date": pd.to_datetime(df['date']).dt.date,
+            "Predicted Accidents": df['predicted_accidents']
+        }
+
+        if hindcast:
+            table_data["Actual Accidents"] = df['accidents']
+
+        # Convert the dictionary to a DataFrame
+        table_df = pd.DataFrame(table_data)
+
+        # Hide axes
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        ax.set_frame_on(False)
+
+        # Create the table
+        table = ax.table(cellText=table_df.values, colLabels=table_df.columns, cellLoc='center', loc='center')
+
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        table.scale(1.2, 1.2)
+
+        # Save the table as an image
+        plt.savefig(file_path, bbox_inches='tight')
+        plt.close(fig)
+        return plt
