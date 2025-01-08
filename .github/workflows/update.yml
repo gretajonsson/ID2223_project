@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: GitHub Pages Deploy
 
 on:
   workflow_run:
@@ -13,8 +13,34 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Deploy GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: GitHub Pages publish
+      uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./  
+        commit_message: "Air Quality Dashboard published"
+        commit_options: '--no-verify --signoff'
+
+        # Include all the directories and files that need to be published
+        file_pattern: 
+          - 'docs/air-quality/assets/img/*'
+          - 'docs/_includes/*'
+          - 'data/*'
+          - 'project/accidents_model/images/*'
+          - 'project/functions/*'
+          - 'index.html'
+          - '.gitignore'
+          - 'README.md'
+
+        repository: .
+
+        status_options: '--untracked-files=no'
+
+        skip_dirty_check: true
+
+        skip_fetch: true
+
+        skip_checkout: true
+
+        push_options: '--force'
+
+        # Ensure this points to the gh-pages branch explicitly
+        branch: gh-pages
