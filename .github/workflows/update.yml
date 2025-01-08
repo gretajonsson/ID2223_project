@@ -5,35 +5,18 @@ on:
     workflows: ["Daily Workflow"]
     types:
       - completed
-
 jobs:
-  deploy-pages:
+  update-images:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: GitHub Pages publish
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Page updated"
-        commit_options: '--no-verify --signoff'
-
-        # Use a single glob pattern to include all files and directories
-        file_pattern: '**/*'
-
-        repository: .
-
-        status_options: '--untracked-files=no'
-
-        skip_dirty_check: true
-
-        skip_fetch: true
-
-        skip_checkout: true
-
-        push_options: '--force'
-
-        # Ensure this points to the gh-pages branch explicitly
-        branch: gh-pages
+      - uses: actions/checkout@v3
+      - name: Update Images
+        run: |
+          # Your script for updating images here
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Update images"
+          git push
