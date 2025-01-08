@@ -259,9 +259,8 @@ def traf_plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hi
     ax.plot(day, df['predicted_accidents'], label='Predicted Accidents', color='red', linewidth=2, marker='o', markersize=5, markerfacecolor='blue')
 
 
-    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     ax.get_yaxis().set_major_formatter(plt.ScalarFormatter())
-    ax.set_ylim(bottom=1)
 
     # Set the labels and title
     ax.set_xlabel('Date')
@@ -296,7 +295,7 @@ def plot_accidents_forecast(city: str, df: pd.DataFrame, file_path: str, hindcas
     ax.bar(day, df['predicted_accidents'], label='Predicted Accidents', color='red')
 
     # Set the y-axis ticks
-    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+    ax.set_yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     ax.set_ylim(bottom=0)
 
     # Set the labels and title
