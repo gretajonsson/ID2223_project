@@ -13,22 +13,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
     - name: GitHub Pages publish
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "Air Quality Dashboard published"
+        commit_message: "Page updated"
         commit_options: '--no-verify --signoff'
 
-        # Include all the directories and files that need to be published
-        file_pattern: 
-          - 'docs/air-quality/assets/img/*'
-          - 'docs/_includes/*'
-          - 'data/*'
-          - 'project/accidents_model/images/*'
-          - 'project/functions/*'
-          - 'index.html'
-          - '.gitignore'
-          - 'README.md'
+        # Use a single glob pattern to include all files and directories
+        file_pattern: '**/*'
 
         repository: .
 
