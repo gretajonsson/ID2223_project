@@ -114,8 +114,6 @@ def get_hourly_weather_forecast(city, latitude, longitude):
     hourly_dataframe = hourly_dataframe.dropna()
     return hourly_dataframe
 
-
-
 def get_city_coordinates(city_name: str):
     """
     Takes city name and returns its latitude and longitude (rounded to 2 digits after dot).
@@ -139,7 +137,6 @@ def trigger_request(url:str):
         raise requests.exceptions.RequestException(response.status_code)
 
     return data
-
 
 def get_pm25(aqicn_url: str, country: str, city: str, street: str, day: datetime.date, AQI_API_KEY: str):
     """
@@ -229,13 +226,11 @@ def purge_project(proj):
     # delete_models(mr, "air_quality_xgboost_model")
     # delete_secrets(proj, "SENSOR_LOCATION_JSON")
 
-
 def secrets_api(proj):
     host = "c.app.hopsworks.ai"
     api_key = os.environ.get('HOPSWORKS_API_KEY')
     conn = hopsworks.connection(host=host, project=proj, api_key_value=api_key)
     return conn.get_secrets_api()
-
 
 def check_file_path(file_path):
     my_file = Path(file_path)
@@ -255,9 +250,6 @@ def backfill_predictions_for_monitoring(weather_fg, air_quality_df, monitor_fg, 
     df = df.drop('pm25', axis=1)
     monitor_fg.insert(df, write_options={"wait_for_job": True})
     return hindcast_df
-
-
-
 
 def traf_plot_accidents_forecast(country: str, df: pd.DataFrame, file_path: str, hindcast=False):
     fig, ax = plt.subplots(figsize=(10, 6))
