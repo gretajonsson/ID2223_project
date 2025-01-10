@@ -116,3 +116,7 @@ ID2223_PROJECT/
 - **Modular Code**: Organized pipelines for data retrieval, feature engineering, training, and inference.
 
 ---
+
+## Reports
+
+- [Report ID2223 HT24](data/Report_ID2223_HT24.pdf): Detailed project report for the course ID2223, Autumn 2024.
